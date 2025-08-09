@@ -1,0 +1,144 @@
+package com.jdbcp.pr;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class HospitalManagementSystem {
+
+	public static void main(String[] args) {
+		Connection con = null;
+		PreparedStatement insertStmt = null;
+		PreparedStatement updateStmt = null;
+		PreparedStatement deleteStmt = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		Scanner sc = new Scanner(System.in);
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/HospitalManagement", "root", "A#@21jja$y2");
+
+			String createTable = "CREATE TABLE IF NOT EXISTS patientD (" + "id INT PRIMARY KEY AUTO_INCREMENT, "
+					+ "name VARCHAR(100), " + "age INT, " + "disease VARCHAR(100), " + "admissionDate DATE, "
+					+ "doctorAssigned VARCHAR(100)" + ")";
+			stmt = con.createStatement();
+			stmt.execute(createTable);
+			System.out.println("Table created successfully!\n");
+
+			while (true) {
+				System.out.println("\nChoose an option:");
+				System.out.println("1. Insert New Patient");
+				System.out.println("2. Update Patient Name");
+				System.out.println("3. Display All Patients");
+				System.out.println("5. Delete Record with Name");
+				System.out.println("4. Exit");
+				System.out.print("Enter your choice (1/2/3/4): ");
+				int choice = Integer.parseInt(sc.nextLine());
+
+				switch (choice) {
+				case 1:
+					// Insert new patient
+					System.out.print("Enter Patient Name: ");
+					String name = sc.nextLine();
+					System.out.print("Enter Age: ");
+					int age = Integer.parseInt(sc.nextLine());
+					System.out.print("Enter Disease: ");
+					String disease = sc.nextLine();
+					System.out.print("Enter Admission Date (YYYY-MM-DD): ");
+					String admissionDate = sc.nextLine();
+					System.out.print("Enter Doctor Assigned: ");
+					String doctor = sc.nextLine();
+
+					String insertSQL = "INSERT INTO patientD (name, age, disease, admissionDate, doctorAssigned) VALUES (?, ?, ?, ?, ?)";
+					insertStmt = con.prepareStatement(insertSQL);
+					insertStmt.setString(1, name);
+					insertStmt.setInt(2, age);
+					insertStmt.setString(3, disease);
+					insertStmt.setDate(4, Date.valueOf(admissionDate));
+					insertStmt.setString(5, doctor);
+
+					int inserted = insertStmt.executeUpdate();
+					if (inserted > 0) {
+						System.out.println("Patient added successfully!");
+					}
+					break;
+
+				case 2:
+					// Update patient name
+					System.out.print("Enter Old Name: ");
+					String oldName = sc.nextLine();
+					System.out.print("Enter New Name to Replace: ");
+					String newName = sc.nextLine();
+
+					String updateSQL = "UPDATE patientD SET name = ? WHERE name = ?";
+					updateStmt = con.prepareStatement(updateSQL);
+					updateStmt.setString(1, newName);
+					updateStmt.setString(2, oldName);
+
+					int updated = updateStmt.executeUpdate();
+					if (updated > 0) {
+						System.out.println("Name updated successfully! Rows affected: " + updated);
+					} else {
+						System.out.println("No patient found with the name: " + oldName);
+					}
+					break;
+
+				case 3:
+					// Display all patients
+					System.out.println("\nPatient List:");
+					String selectSQL = "SELECT * FROM patientD";
+					rs = stmt.executeQuery(selectSQL);
+
+					while (rs.next()) {
+						System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name") + ", Age: "
+								+ rs.getInt("age") + ", Disease: " + rs.getString("disease") + ", Admission Date: "
+								+ rs.getDate("admissionDate") + ", Doctor Assigned: " + rs.getString("doctorAssigned"));
+					}
+					break;
+				case 4:
+					System.out.println("Enter Name: ");
+					String deleteName = sc.nextLine();
+
+					String deleteSQL = "Delete patientD Where name=?";
+					deleteStmt = con.prepareStatement(deleteSQL);
+					deleteStmt.setString(1, deleteName);
+
+					int deleted = deleteStmt.executeUpdate(deleteSQL);
+					if (deleted > 0) {
+						System.out.println("Name Delete successfully! Rows affected: " + deleted);
+					} else {
+						System.out.println("No patient found with the name: " + deleteName);
+					}
+					break;
+
+				case 5:
+					System.out.println("Exiting...");
+					return;
+
+				default:
+					System.out.println("Invalid choice! Try again.");
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (insertStmt != null)
+					insertStmt.close();
+				if (updateStmt != null)
+					updateStmt.close();
+				if (con != null)
+					con.close();
+				sc.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+	}
+}

@@ -1,0 +1,77 @@
+package com.jdbcp.pr;
+import java.sql.*;
+public class DbConnect {
+
+	public static void main(String[] args) {
+		String userName = "root";
+		String userPassword = "";
+		String url = "";
+		try {
+			//load the drive class
+			 Class.forName("");
+			 
+			 //Connection
+			 Connection con = DriverManager.getConnection(url,userName,userPassword);
+			 
+			 
+			 //To have create sql Statement for database
+			 Statement stmt = con.createStatement();
+			 
+			 
+			 //Getting the result form database
+			 ResultSet rs = stmt.executeQuery("Select * FROM Student");
+			 
+			 System.out.println(rs.getInt("id"));
+			 System.out.println(rs.getString("name"));
+			 
+			 
+			 
+			 con.close();
+			 rs.close();
+			 stmt.close();
+			 
+			 
+			 
+			 
+		}
+		catch(Exception e) {
+			
+		}
+		
+		
+		
+		
+
+	}
+
+}
+//package JDBC;
+////import java.sql.DriverManager;
+//
+//import java.sql.*;
+//
+//public class DBConnect
+//{
+//public static void main(String[] args)
+//	{
+//
+//	try {
+//		//Load JDBC Driver
+//		
+//		Class.forName("");
+//		
+//		//Establish connection
+//		Connection con = DriverManager.getConnection("");
+//		
+//		System.out.println("Connected Successsfully");
+//		con.close();
+//	}
+//		catch (Exception e)
+//	{
+//			e.printStackTrace();
+//			
+//		}
+//	}
+//}
+
+

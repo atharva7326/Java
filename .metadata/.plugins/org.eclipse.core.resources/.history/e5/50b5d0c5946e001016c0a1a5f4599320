@@ -1,0 +1,29 @@
+package com.serialization.pro;
+
+import java.io.*;
+import java.util.*;
+
+class Patient implements Serializable {
+    String name;
+    int id;
+
+    Patient(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+}
+
+public class SerializationArrayList {
+    public static void main(String[] args) {
+        List<Patient> list = new ArrayList<>();
+        list.add(new Patient("Ravi", 101));
+        list.add(new Patient("Simran", 102));
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("patients.ser"))) {
+            out.writeObject(list);
+            System.out.println("Patient list serialized.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.patient.queue.TreeSet.java&apos; to &apos;TreeSetImp.java&apos;&#x0D;&#x0A;- Original project: &apos;PatientQueue&apos;&#x0D;&#x0A;- Original element: &apos;com.patient.queue.TreeSet.java&apos;&#x0D;&#x0A;- Renamed element: &apos;com.patient.queue.TreeSetImp.java&apos;" description="Rename compilation unit &apos;TreeSet.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src&lt;com.patient.queue{TreeSet.java" name="TreeSetImp.java" references="false" stamp="1753859694266" version="1.0"/>
+</session>

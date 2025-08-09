@@ -1,0 +1,98 @@
+//🏥 Use Case: Hospital Patient Management System
+//🎯 Objective:
+//To build a backend module in Java that allows hospital staff to add new patients to a MySQL database securely using JDBC and PreparedStatement.
+//📘 Scenario:
+//A hospital wants to automate its patient registration system. When a new patient arrives, staff members will enter details such as:
+//Patient Name
+//Age
+//Disease
+//Admission Date
+//Doctor Assigned
+//This data should be saved into a patient table in the hospital's database.
+// 
+
+package com.jdbcp.pr;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+//class PatientData{
+//	private int id;
+//	private String name;
+//	private int age;
+//	private String disease;
+//	private 
+//}
+public class HospitalManagementSystem {
+
+	public static void main(String[] args) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		Scanner sc = new Scanner(System.in);
+
+		try {
+
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/HospitalManagement", "root", "A#@21jja$y2");
+
+			String sql = "UPDATE patient SET name = ? WHERE name = ?";
+			pstmt = con.prepareStatement(sql);
+			while (true) {
+
+				System.out.println("Enter New Name to Replace: ");
+				String newName = sc.nextLine();
+				System.out.println("Enter Old Name: ");
+				String oldName = sc.nextLine();
+				pstmt.setString(1, newName);
+				pstmt.setString(2, oldName);
+				int rows = pstmt.executeUpdate();
+
+				if (rows > 0) {
+					System.out.println("Data updated successfully! Rows affected: " + rows);
+
+					rs = pstmt.executeQuery("SELECT * FROM patient");
+
+					while (rs.next()) {
+						System.out.println();
+						System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name") + ", Age: "
+								+ rs.getInt("age") + ", Disease: " + rs.getString("disease"));
+					}
+				} else {
+					System.out.println("No data found with the name " + oldName);
+				}
+				System.out.println();
+				System.out.println("Want more to edit yes/no: ");
+				String choice = sc.nextLine();
+				if (choice.equalsIgnoreCase("no")) {
+					System.out.println("Byee.... ");
+					break;
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+				if (rs != null) {
+					rs.close();
+				}
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+
+	}
+
+}

@@ -1,0 +1,29 @@
+//🏥 Use Case: Hospital Patient Management System
+//🎯 Objective:
+//To build a backend module in Java that allows hospital staff to add new patients to a MySQL database securely using JDBC and PreparedStatement.
+//📘 Scenario:
+//A hospital wants to automate its patient registration system. When a new patient arrives, staff members will enter details such as:
+//Patient Name
+//Age
+//Disease
+//Admission Date
+//Doctor Assigned
+//This data should be saved into a patient table in the hospital's database.
+// 
+
+package com.jdbcp.pr;
+//class PatientData{
+//	private int id;
+//	private String name;
+//	private int age;
+//	private String disease;
+//	private 
+//}
+public class HospitalManagementSystem {
+
+	public static void main(String[] args) {
+		
+
+	}
+
+}

@@ -1,0 +1,83 @@
+package com.jdbcp.pr;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class HospitalManagementSystem {
+
+	public static void main(String[] args) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		Scanner sc = new Scanner(System.in);
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/HospitalManagement", "root", "A#@21jja$y2");
+
+			String createTable = "CREATE TABLE IF NOT EXISTS patientD (" + "id INT PRIMARY KEY AUTO_INCREMENT, "
+					+ "name VARCHAR(100), " + "age INT, " + "disease VARCHAR(100), " + "admissionDate DATE, "
+					+ "doctorAssigned VARCHAR(100)" + ")";
+			stmt = con.createStatement();
+			stmt.execute(createTable);
+			System.out.println("Table created successfully!\n");
+
+			String updateSQL = "UPDATE patientD SET name = ? WHERE name = ?";
+			pstmt = con.prepareStatement(updateSQL);
+
+			while (true) {
+				System.out.print("Enter Old Name: ");
+				String oldName = sc.nextLine();
+
+				System.out.print("Enter New Name to Replace: ");
+				String newName = sc.nextLine();
+
+				pstmt.setString(1, newName);
+				pstmt.setString(2, oldName);
+				int rows = pstmt.executeUpdate();
+
+				if (rows > 0) {
+					System.out.println("Name updated successfully! Rows affected: " + rows);
+				} else {
+					System.out.println("No patient found with the name: " + oldName);
+				}
+
+				System.out.println("\n Current Patient List:");
+				String selectSQL = "SELECT * FROM patientD";
+				rs = stmt.executeQuery(selectSQL);
+
+				while (rs.next()) {
+					System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name") + ", Age: "
+							+ rs.getInt("age") + ", Disease: " + rs.getString("disease") + ", Admission Date: "
+							+ rs.getDate("admissionDate") + ", Doctor Assigned: " + rs.getString("doctorAssigned"));
+				}
+
+				System.out.print("\nDo you want to update more records? (yes/no): ");
+				String choice = sc.nextLine();
+				if (choice.equalsIgnoreCase("no")) {
+					System.out.println("Exiting...");
+					break;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+				sc.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+	}
+}

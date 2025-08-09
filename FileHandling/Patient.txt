@@ -1,0 +1,4 @@
+Patient Details:  Patient Id: 1, Patient Name: Ajay, Patient Disease: Lungs, Patient Age: 19
+All good
+Patient Details:  Patient Id: 1, Patient Name: Ajay, Patient Disease: Lungs, Patient Age: 19
+All good

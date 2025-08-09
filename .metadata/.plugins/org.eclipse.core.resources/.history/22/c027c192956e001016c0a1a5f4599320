@@ -1,0 +1,46 @@
+package com.serialization.pro;
+
+import java.io.*;
+import java.util.*;
+
+class Patient implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    String name;
+    int id;
+
+    Patient(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String toString() {
+        return "Patient: " + name + ", ID: " + id;
+    }
+}
+
+public class SerializationArrayList {
+    public static void main(String[] args) {
+
+        List<Patient> list = new ArrayList<>();
+        list.add(new Patient("Ravi", 101));
+        list.add(new Patient("Simran", 102));
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("patients.ser"))) {
+            out.writeObject(list);
+            System.out.println("Patient list serialized successfully.");
+        } catch (IOException e) {
+            System.out.println("Error during serialization: " + e.getMessage());
+        }
+
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("patients.ser"))) {
+            List<Patient> list1 = (List<Patient>) in.readObject();
+            System.out.println("\n Deserialized Patient List:");
+            for (Patient p : list1) {
+                System.out.println(p);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error during deserialization: " + e.getMessage());
+        }
+    }
+}

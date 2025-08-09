@@ -1,0 +1,38 @@
+package com.jdbcp.pr;
+
+import java.sql.*;
+
+public class DbConnect {
+	public static void main(String[] args) {
+		String url = "jdbc:mysql://localhost:3306/user_data";
+		String user = "root";
+		String password = "A#@21jja$y2";
+
+		try {
+			// 1. Load the JDBC driver (optional for newer versions)
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// 2. Establish a connection
+			Connection conn = DriverManager.getConnection(url, user, password);
+			System.out.println("Connected to database!");
+
+//             3. Create a statement
+			Statement stmt = conn.createStatement();
+//
+			// 4. Execute a query
+			ResultSet rs = stmt.executeQuery("SELECT * FROM details");
+//
+			// 5. Process the result
+			while (rs.next()) {
+				System.out.println("ID: " + rs.getInt("id") + ", FirstName: " + rs.getString("FirstName") +", LastName: " + rs.getString("LastName"));
+			}
+
+			// 6. Close connections
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

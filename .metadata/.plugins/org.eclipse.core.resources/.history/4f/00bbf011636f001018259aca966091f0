@@ -1,0 +1,48 @@
+package com.jdbcp.pr;
+
+import java.sql.*;
+
+public class UpdateTableData {
+
+	public static void main(String[] args) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			// 1. Load JDBC Driver
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// 2. Connect to the Database
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Hospital", "root", "A#@21jja$y2");
+
+			// 3. SQL Statement
+			String sql = "UPDATE Hospital SET name = ? WHERE name = ?";
+			pstmt = con.prepareStatement(sql);
+
+			pstmt.setString(1, "Ajay");
+			pstmt.setString(2, "Renu");
+
+			int rows = pstmt.executeUpdate();
+
+			// 4. Success Message
+			if (rows > 0) {
+				System.out.println("✅ Data updated successfully! Rows affected: " + rows);
+			} else {
+				System.out.println("⚠️ No data found with the name 'Renu'.");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 5. Close Resources
+			try {
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+	}
+}
